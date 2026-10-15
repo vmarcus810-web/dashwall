@@ -1,0 +1,33 @@
+{
+  "RefreshMinutes": 5,
+  "Rows": 2,
+  "Columns": 2,
+  "SpanAllMonitors": true,
+  "WindowPerMonitor": false,
+  "Dashboards": [
+    {
+      "Name": "Vendas",
+      "Url": "https://app.powerbi.com/reportEmbed?reportId=00000000-0000-0000-0000-000000000001&autoAuth=true&ctid=00000000-0000-0000-0000-000000000000&navContentPaneEnabled=false",
+      "Enabled": true,
+      "Zoom": 100
+    },
+    {
+      "Name": "Operações",
+      "Url": "https://app.powerbi.com/reportEmbed?reportId=00000000-0000-0000-0000-000000000002&autoAuth=true&ctid=00000000-0000-0000-0000-000000000000&navContentPaneEnabled=false",
+      "Enabled": true,
+      "Zoom": 100
+    },
+    {
+      "Name": "Financeiro",
+      "Url": "https://app.powerbi.com/reportEmbed?reportId=00000000-0000-0000-0000-000000000003&autoAuth=true&ctid=00000000-0000-0000-0000-000000000000&navContentPaneEnabled=false",
+      "Enabled": true,
+      "Zoom": 100
+    }
+  ],
+  "Tiles": [
+    { "Row": 0, "Column": 0, "RowSpan": 1, "ColumnSpan": 2, "Dashboard": "Vendas" },
+    { "Row": 1, "Column": 0, "RowSpan": 1, "ColumnSpan": 1, "Dashboard": "Operações" },
+    { "Row": 1, "Column": 1, "RowSpan": 1, "ColumnSpan": 1, "Dashboard": "Financeiro" }
+  ],
+  "Monitors": []
+}

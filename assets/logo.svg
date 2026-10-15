@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1E293B" />
+      <stop offset="1" stop-color="#0F172A" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1024" height="1024" rx="220" fill="url(#bg)" />
+
+  <!-- Linha de cima: um dashboard estendido por dois monitores -->
+  <rect x="150" y="150" width="724" height="344" rx="48" fill="#FFFFFF" fill-opacity="0.07"
+        stroke="#22D3EE" stroke-width="22" />
+  <g fill="#22D3EE">
+    <rect x="230" y="344" width="58" height="90" rx="14" />
+    <rect x="318" y="274" width="58" height="160" rx="14" />
+    <rect x="406" y="314" width="58" height="120" rx="14" />
+    <rect x="494" y="224" width="58" height="210" rx="14" />
+    <rect x="582" y="284" width="58" height="150" rx="14" />
+    <rect x="670" y="194" width="58" height="240" rx="14" />
+  </g>
+
+  <!-- Linha de baixo: um dashboard por monitor -->
+  <rect x="150" y="530" width="344" height="344" rx="48" fill="#FFFFFF" fill-opacity="0.07"
+        stroke="#6366F1" stroke-width="22" />
+  <polyline points="210,804 280,724 340,764 434,600" fill="none" stroke="#6366F1"
+            stroke-width="26" stroke-linecap="round" stroke-linejoin="round" />
+
+  <rect x="530" y="530" width="344" height="344" rx="48" fill="#FFFFFF" fill-opacity="0.07"
+        stroke="#A78BFA" stroke-width="22" />
+  <circle cx="702" cy="702" r="70" fill="none" stroke="#A78BFA" stroke-width="22" />
+  <circle cx="702" cy="702" r="30" fill="#A78BFA" />
+</svg>

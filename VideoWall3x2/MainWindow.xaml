@@ -1,0 +1,14 @@
+﻿<Window x:Class="VideoWall.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="VideoWall"
+        Icon="pack://application:,,,/Assets/logo.ico"
+        WindowStartupLocation="Manual"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        Background="Black">
+
+    <!-- Grade montada em código a partir de videowallsettings.json.
+         Esc ou F2 volta ao formulário de configuração. -->
+    <Grid x:Name="WallGrid" Margin="4" />
+</Window>

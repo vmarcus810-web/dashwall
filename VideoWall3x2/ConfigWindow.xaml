@@ -1,0 +1,176 @@
+<Window x:Class="VideoWall.ConfigWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="VideoWall - Configuração"
+        Icon="pack://application:,,,/Assets/logo.ico"
+        Width="1200"
+        Height="760"
+        MinWidth="900"
+        MinHeight="560"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <!-- Cartão: área com fundo e borda suaves do tema Fluent -->
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorDefaultBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="16" />
+        </Style>
+
+        <Style x:Key="CardTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="0,0,0,10" />
+        </Style>
+
+        <Style x:Key="Hint" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+
+        <Style x:Key="Label" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0,0,8,0" />
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Cabeçalho -->
+        <DockPanel Grid.Row="0" Margin="0,0,0,16">
+            <Image Source="pack://application:,,,/Assets/logo.png" Width="48" Height="48"
+                   Margin="0,0,14,0" RenderOptions.BitmapScalingMode="HighQuality" />
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock Text="VideoWall" FontSize="24" FontWeight="SemiBold" />
+                <TextBlock Style="{StaticResource Hint}"
+                           Text="Dashboards do Power BI em vários monitores: um por tela ou estendidos pela parede." />
+            </StackPanel>
+        </DockPanel>
+
+        <!-- Opções gerais -->
+        <Border Grid.Row="1" Style="{StaticResource Card}" Margin="0,0,0,12" Padding="16,10">
+            <WrapPanel VerticalAlignment="Center">
+                <TextBlock Style="{StaticResource Label}" Text="Monitores (linhas × colunas)" />
+                <ComboBox x:Name="RowsBox" Width="70" SelectionChanged="GridSize_Changed" />
+                <TextBlock Style="{StaticResource Label}" Text="×" Margin="8,0" />
+                <ComboBox x:Name="ColsBox" Width="70" Margin="0,0,28,0"
+                          SelectionChanged="GridSize_Changed" />
+
+                <TextBlock Style="{StaticResource Label}" Text="Atualizar a cada (min)" />
+                <TextBox x:Name="RefreshBox" Width="70" Margin="0,0,28,0" />
+
+                <CheckBox x:Name="SpanBox" VerticalAlignment="Center"
+                          Content="Grade cobre todos os monitores" />
+            </WrapPanel>
+        </Border>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="12" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Dashboards -->
+            <Border Grid.Column="0" Style="{StaticResource Card}">
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Top" Style="{StaticResource CardTitle}" Text="Dashboards" />
+
+                    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,10,0,0">
+                        <Button Content="+ Adicionar" MinWidth="110" Click="AddDashboard_Click" />
+                        <Button Content="Remover" MinWidth="110" Margin="8,0,0,0"
+                                Click="RemoveDashboard_Click" />
+                    </StackPanel>
+
+                    <DataGrid x:Name="DashGrid"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              CanUserDeleteRows="False"
+                              HeadersVisibility="Column"
+                              GridLinesVisibility="None"
+                              BeginningEdit="DashGrid_BeginningEdit"
+                              RowEditEnding="DashGrid_RowEditEnding">
+                        <DataGrid.Columns>
+                            <DataGridCheckBoxColumn Header="Ativo" Binding="{Binding Enabled}" />
+                            <DataGridTextColumn Header="Nome" Binding="{Binding Name}" Width="130" />
+                            <DataGridTextColumn Header="Zoom %" Binding="{Binding Zoom}" />
+                            <DataGridTextColumn Header="URL" Binding="{Binding Url}" Width="*" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </Border>
+
+            <!-- Layout -->
+            <Border Grid.Column="2" Style="{StaticResource Card}">
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Top" Style="{StaticResource CardTitle}" Text="Layout da parede" />
+
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,12">
+                        <RadioButton x:Name="GridModeRadio" GroupName="Mode" Margin="0,0,20,0"
+                                     Content="Grade (uma janela)" Checked="Mode_Changed" />
+                        <RadioButton x:Name="MonitorModeRadio" GroupName="Mode"
+                                     Content="Uma janela por monitor" Checked="Mode_Changed" />
+                    </StackPanel>
+
+                    <Grid>
+                        <!-- Modo janela por monitor -->
+                        <DockPanel x:Name="MonitorPanel" Visibility="Collapsed">
+                            <StackPanel DockPanel.Dock="Top">
+                                <Button Content="Detectar monitores novamente" HorizontalAlignment="Left"
+                                        Margin="0,0,0,8" Click="DetectMonitors_Click" />
+                                <TextBlock Style="{StaticResource Hint}" Margin="0,0,0,10"
+                                           Text="Cada monitor abre uma janela própria em tela cheia com o dashboard escolhido." />
+                            </StackPanel>
+                            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                <StackPanel x:Name="MonitorList" />
+                            </ScrollViewer>
+                        </DockPanel>
+
+                        <!-- Modo grade -->
+                        <DockPanel x:Name="GridPanel">
+                            <StackPanel DockPanel.Dock="Top">
+                                <WrapPanel>
+                                    <Button Content="Um dashboard em todos" Margin="0,0,8,8"
+                                            Click="MergeAll_Click" />
+                                    <Button Content="Um por monitor" Margin="0,0,8,8"
+                                            Click="SplitAll_Click" />
+                                    <Button Content="Mesclar seleção" Margin="0,0,8,8"
+                                            Click="MergeSelected_Click" />
+                                    <Button Content="Separar seleção" Margin="0,0,8,8"
+                                            Click="SplitSelected_Click" />
+                                </WrapPanel>
+                                <TextBlock Style="{StaticResource Hint}" Margin="0,0,0,10"
+                                           Text="Cada célula é um monitor. Clique para selecionar e use Mesclar para estender um dashboard por vários monitores." />
+                            </StackPanel>
+
+                            <Border CornerRadius="6" Background="#0B1120" Padding="4">
+                                <Grid x:Name="PreviewGrid" />
+                            </Border>
+                        </DockPanel>
+                    </Grid>
+                </DockPanel>
+            </Border>
+        </Grid>
+
+        <!-- Rodapé -->
+        <DockPanel Grid.Row="3" Margin="0,16,0,0">
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                <Button Content="Sair" MinWidth="100" Click="Exit_Click" />
+                <Button Content="Salvar" MinWidth="100" Margin="8,0,0,0" Click="Save_Click" />
+                <Button Content="▶  Iniciar Video Wall" MinWidth="170" Margin="8,0,0,0"
+                        Style="{DynamicResource AccentButtonStyle}"
+                        IsDefault="True" Click="Start_Click" />
+            </StackPanel>
+            <TextBlock Style="{StaticResource Hint}" VerticalAlignment="Center"
+                       Text="No video wall: Esc ou F2 volta para este formulário." />
+        </DockPanel>
+    </Grid>
+</Window>

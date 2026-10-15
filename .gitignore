@@ -1,0 +1,15 @@
+# Build
+bin/
+obj/
+*.zip
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Configuração local com URLs reais (use videowallsettings.example.json)
+videowallsettings.json
+
+# Dados do navegador embutido (login do Power BI)
+*.WebView2/
