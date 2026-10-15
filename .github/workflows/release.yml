@@ -1,0 +1,64 @@
+# Compila o executável e publica uma Release a cada tag vX.Y.Z.
+# Uso: git tag v1.0.0 && git push origin v1.0.0
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Versão
+        id: version
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}"
+          $version = if ($tag -match '^v(\d+\.\d+\.\d+)') { $Matches[1] } else { "0.0.0" }
+          "version=$version" >> $env:GITHUB_OUTPUT
+
+      - name: Publish
+        run: >
+          dotnet publish VideoWall3x2/VideoWall3x2.csproj
+          -p:PublishProfile=FolderProfile
+          -p:Version=${{ steps.version.outputs.version }}
+
+      - name: Compactar
+        shell: pwsh
+        run: |
+          $dir = "VideoWall3x2/bin/Release/net10.0-windows/publish"
+          Compress-Archive -Path "$dir/*" -DestinationPath "dashwall-${{ github.ref_name }}-win-x64.zip"
+
+      - name: Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dashwall-${{ github.ref_name }}-win-x64.zip
+          generate_release_notes: true
+          body: |
+            Executável único para Windows 10/11 64 bits, sem precisar instalar o .NET.
+
+            1. Baixe e descompacte o zip numa pasta com permissão de escrita (ex.: `C:\DashWall`).
+            2. Abra `VideoWall3x2.exe`, cadastre os dashboards e clique em **Iniciar Video Wall**.
+
+            Requer o [WebView2 Runtime](https://developer.microsoft.com/microsoft-edge/webview2/) (já incluso no Windows 11).
+
+      - name: Artefato (execução manual)
+        if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: dashwall-win-x64
+          path: dashwall-*.zip
